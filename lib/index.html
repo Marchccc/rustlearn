@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>test</title>
+    <link rel="stylesheet" type="text/css" href="./static/mdc.textfield.css" /> 
+    <link rel="stylesheet" type="text/css" href="./static/mdc.button.css" /> 
+    <link rel="stylesheet" type="text/css" href="./static/mdc.ripple.css" />
+    <link rel="stylesheet" type="text/css" href="./static/mdc.icon-button.css" />
+    <link rel="stylesheet" type="text/css" href="./static/mdc.drawer.css" />
+    <link rel="stylesheet" type="text/css" href="./static/mdc.theme.css" />
+    <link rel="stylesheet" type="text/css" href="./static/mdc.top-app-bar.css" />
+    <link rel="stylesheet" type="text/css" href="./static/mdc.list.css" />
+    <link rel="stylesheet" type="text/css" href="./static/mdc.layout-grid.css" />
+    <script src="./static/mdc.ripple.js"></script>
+    <script src="./static/mdc.textfield.js"></script>
+    <script src="./static/mdc.iconButton.js"></script>
+    <script src="./static/mdc.drawer.js"></script>
+    <script src="./static/mdc.topAppBar.js"></script>
+    <script src="./static/mdc.list.js"></script>
+    <script>
+      window.$ = window.jQuery = require('./static/jquery.js');
+    </script>
+    <style>
+        :root {
+            --mdc-theme-primary: #4484b6; /* 主题原色 */
+            --mdc-theme-secondary: #4484b6; /* 主题二次色 */
+            --mdc-theme-background: #4484b6; /* 主题背景色 */
+            --mdc-theme-surface	: #4484b6; /* 主题表面色 */
+            --mdc-theme-on-primary: #FFFFFF; /* 主要背景上的文字颜色 */
+            --mdc-theme-on-secondary: #4484b6; /* 辅助背景顶部的文本颜色 */
+            --mdc-theme-on-surface: #4484b6; /* 表面背景顶部的文字颜色 */
+        }
+        body {
+            display: flex;
+            height: 100vh;
+            margin: 0;
+        }
+    </style>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+  </head>
+  <body>
+
+  <header class="mdc-top-app-bar app-bar" id="app-bar">
+    <div class="mdc-top-app-bar__row">
+      <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+        <button class="material-icons mdc-top-app-bar__navigation-icon mdc-icon-button">menu</button>
+        <!-- <span class="mdc-top-app-bar__title">Dismissible Drawer</span> -->
+      </section>
+    </div>
+  </header>
+  <aside class="mdc-drawer mdc-drawer--modal">
+    <div class="mdc-drawer__content">
+      <nav class="mdc-list">
+        <a class="mdc-list-item mdc-list-item--activated" href="./index.html" aria-current="page" tabindex="0">
+          <i class="material-icons mdc-list-item__graphic" aria-hidden="true">construction</i>
+          <span class="mdc-list-item__text">子域名查询</span>
+        </a>
+        <a class="mdc-list-item" href="./about.html">
+          <i class="material-icons mdc-list-item__graphic" aria-hidden="true">help_outline</i>
+          <span class="mdc-list-item__text">关于本程序</span>
+        </a>
+      </nav>
+    </div>
+  </aside>
+
+  <div class="mdc-drawer-scrim"></div>
+  <div id="main-content"></div>
+
+  <div class="mdc-layout-grid" style="margin-top: 64px;padding-left:3em;padding-right:3em;">
+        <div class="mdc-layout-grid__inner">
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+              <label style="line-height:70px;">域名</label>
+            </div>
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
+              <label class="mdc-text-field mdc-text-field--filled">
+                <input class="mdc-text-field__input" placeholder="如:baidu.com" type="text" aria-labelledby="my-label-id" id="domain">
+                <span class="mdc-line-ripple"></span>
+              </label>
+            </div>
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+              <button class="mdc-button mdc-button--unelevated mdc-ripple-upgraded" id="execButton" style="margin-top: 0.8em;">
+                  <div class="mdc-button__ripple"></div>
+                  <span class="mdc-button__label">查询</span>
+              </button>
+            </div>
+            <div class="mdc-layout-grid__cell"></div>
+        </div>
+
+        <div class="mdc-layout-grid__inner">
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">
+              <label>结果</label>
+            </div>
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4" id="con" style="height: 300px;overflow:scroll;border: 1px dashed #4484b6;padding-left:12px;padding-right:12px;">
+              <!-- www.baidu.com -->
+            </div>
+        </div>
+
+    </div>
+
+  <script>
+    var textfield = new mdc.textfield.MDCTextField(document.querySelector('.mdc-text-field'));
+		var execButton = new mdc.ripple.MDCRipple(document.querySelector('#execButton'));
+    $("#execButton").on("click", function () {
+      callrust();
+    });
+    
+    var list = new mdc.list.MDCList.attachTo(document.querySelector('.mdc-list'));
+    list.wrapFocus = true;
+
+    var drawer = new mdc.drawer.MDCDrawer.attachTo(document.querySelector('.mdc-drawer'));
+
+    var topAppBar = new mdc.topAppBar.MDCTopAppBar(document.getElementById('app-bar'));
+    topAppBar.setScrollTarget(document.getElementById('main-content'));
+    topAppBar.listen('MDCTopAppBar:nav', () => {
+      drawer.open = !drawer.open;
+    });
+    
+    // 初始化websocket
+    // const WebSocket = require('ws');
+    // const wss = new WebSocket.Server({ port: 8080 });
+    // wss.on('connection', function connection(ws) {
+    //   ws.on('message', function incoming(message) {
+    //     console.log('received: %s', message);
+    //   });
+      
+    //   ws.send('something');
+    // });
+    var rust = require('../native');
+    // rust.ele_testserver();
+
+    // 点击查询按钮后调用rust方法，rust的websocket client连接上面建立的server并发送消息。
+    function callrust()
+    {
+      if($("#domain").val() == "") {
+        alert("请输入域名");
+        return false;
+      }
+      $("#con").html("");
+      var arr = rust.doit($("#domain").val());
+      arr.forEach(element => {
+        // console.log(element);
+        $("#con").prepend(element);
+        $("#con").prepend("\n");
+      });
+    }
+    
+  </script>
+  </body>
+</html>

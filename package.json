@@ -1,0 +1,32 @@
+{
+  "name": "thread-count",
+  "version": "0.1.0",
+  "description": "",
+  "main": "lib/index.js",
+  "author": "OX007 <0x00gc@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^7.1.11",
+    "electron-build-env": "^0.2.0",
+    "electron-builder": "^22.7.0",
+    "electron-packager": "^14.2.1",
+    "electron-rebuild": "^1.11.0",
+    "eslint": "^6.8.0",
+    "neon-cli": "^0.3.3",
+    "ws": "^7.3.0"
+  },
+  "dependencies": {
+    "@material/textfield": "^6.0.0",
+    "neon-cli": "^0.4.0",
+    "react-desktop": "^0.3.9"
+  },
+  "scripts": {
+    "install": "neon build",
+    "start": "electron .",
+    "build": "electron-build-env neon build --release",
+    "package": "electron-packager ./ dig --platform=darwin --arch=x64 --ignore=node_modules/ --out=./dist --overwrite --electron-version 7.1.11 --app-version=1.0.0",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder --mac",
+    "ele-rebuild": "electron-builder node-gyp-rebuild"
+  }
+}

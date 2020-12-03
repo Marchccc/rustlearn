@@ -1,0 +1,28 @@
+[package]
+name = "thread-count"
+version = "0.1.0"
+authors = ["OX007 <0x00gc@gmail.com>"]
+license = "MIT"
+build = "build.rs"
+edition = "2018"
+exclude = ["artifacts.json", "index.node"]
+
+[lib]
+name = "thread_count"
+crate-type = ["cdylib"]
+
+[build-dependencies]
+neon-build = "0.4.0"
+
+[dependencies]
+neon = "0.4.0"
+num_cpus = "1.4.0"
+reqwest = "0.9.24"
+file = "1.1.2"
+threadpool = "1.8.1"
+
+[dependencies.websocket]
+version = "0.24.0"
+features = [
+    "sync"
+]
